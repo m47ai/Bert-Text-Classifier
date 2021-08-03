@@ -9,6 +9,7 @@ import torch
 from torch import cuda
 import numpy as np
 from sklearn import metrics
+from tqdm import tqdm 
 
 
 device = 'cuda' if cuda.is_available() else 'cpu'
@@ -60,12 +61,17 @@ def loss_fn(outputs, targets):
 
 optimizer = torch.optim.Adam(params =  model.parameters(), lr=LEARNING_RATE)
 
-for epoch in range(EPOCHS):
+for epoch in range((EPOCHS)):
 
-    pwtrain(epoch,model,training_loader,device,optimizer,loss_fn)
+    train(epoch,model,training_loader,device,optimizer,loss_fn)
+    
+    print(epoch)
 
 
-for epoch in range(EPOCHS):
+model.save_pretrained('hgf_model')
+
+
+for epoch in range((EPOCHS)):
 
     outputs, targets = validation(epoch,model,testing_loader,device,optimizer,loss_fn)
 
